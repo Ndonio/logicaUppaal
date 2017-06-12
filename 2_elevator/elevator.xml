@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_1.dtd'><nta><declaration>// Place global declarations here.
+
+/* System Specifications 
+
+2.1
+Modellare un ascensore che opera tra due piani soltanto (piano terra e primo piano). 
+Quando l’ascensore arriva a un certo piano, la porta si apre automaticamente tra 2 e 5 secondi da quando `e arrivato.
+Quando la porta `e aperta possono entrare, uno ad uno, i passeggeri (non ci sono limiti di spazio!). 
+La porta poi si chiude esattamente 6 secondi dopo l’ingresso dell’ultimo passeggero. 
+Quando la porta si `e chiusa, l’ascensore aspetta tra 2 e 4 secondi, poi si muove verso l’altro piano. 
+L’ascensore `e inizialmente al piano terra con la porta chiusa. 
+
+Suggerimento: 
+utilizzare 3 stati per ogni piano, uno di arrivo, uno di partenza, e uno con un autociclo in cui la porta è aperta e possono entrare i asseggeri.
+
+2.2
+Formulare una query Uppaal che esprima il fatto che in ogni esecuzione esiste uno stato in cui l’ascensore arriva al primo piano e verificare che il sistema non la soddisfa. 
+Esaminare la traccia generata da Uppaal per capirne il motivo.
+*/</declaration><template><name x="5" y="5">elevator</name><declaration>// Place local declarations here.
+clock x;</declaration><location id="id0" x="-136" y="56"><name x="-240" y="56">p2_partenza</name><label kind="invariant" x="-192" y="72">x&lt;=4</label></location><location id="id1" x="64" y="56"><name x="32" y="8">p2_aperta</name><label kind="invariant" x="40" y="24">x&lt;=6</label></location><location id="id2" x="248" y="56"><name x="264" y="48">p2_arrivo</name><label kind="invariant" x="264" y="64">x&lt;=5</label></location><location id="id3" x="248" y="-120"><name x="264" y="-152">p1_partenza</name><label kind="invariant" x="264" y="-128">x&lt;=4</label></location><location id="id4" x="64" y="-120"><name x="32" y="-88">p1_aperta</name><label kind="invariant" x="48" y="-104">x&lt;=6</label></location><location id="id5" x="-136" y="-120"><name x="-216" y="-152">p1_arrivo</name><label kind="invariant" x="-200" y="-120">x&lt;=5</label></location><init ref="id5"/><transition><source ref="id1"/><target ref="id1"/><label kind="guard" x="40" y="136">x&gt;=0</label><label kind="assignment" x="48" y="152">x:=0</label><nail x="16" y="136"/><nail x="104" y="136"/></transition><transition><source ref="id0"/><target ref="id5"/><label kind="guard" x="-184" y="-48">x&gt;=2</label><label kind="assignment" x="-176" y="-32">x:=0</label></transition><transition><source ref="id1"/><target ref="id0"/><label kind="guard" x="-80" y="24">x&gt;=6</label><label kind="assignment" x="-72" y="40">x:=0</label></transition><transition><source ref="id2"/><target ref="id1"/><label kind="guard" x="144" y="24">x&gt;=3</label><label kind="assignment" x="152" y="40">x:=0</label></transition><transition><source ref="id3"/><target ref="id2"/><label kind="guard" x="256" y="-48">x&gt;=2</label><label kind="assignment" x="256" y="-32">x:=0</label></transition><transition><source ref="id4"/><target ref="id3"/><label kind="guard" x="144" y="-136">x&gt;=6</label><label kind="assignment" x="144" y="-120">x:=0</label></transition><transition><source ref="id4"/><target ref="id4"/><label kind="guard" x="40" y="-232">x&gt;=0</label><label kind="assignment" x="48" y="-216">x:=0</label><nail x="96" y="-200"/><nail x="96" y="-200"/><nail x="40" y="-200"/></transition><transition><source ref="id5"/><target ref="id4"/><label kind="guard" x="-80" y="-152">x&gt;=3</label><label kind="assignment" x="-72" y="-136">x:=0</label></transition></template><system>// Place template instantiations here.
+Elevator = elevator();
+
+// List one or more processes to be composed into a system.
+system Elevator;</system></nta>

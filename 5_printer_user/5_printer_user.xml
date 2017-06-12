@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_1.dtd'><nta><declaration>// Place global declarations here.
+
+/*
+Definire una rete di TA che rappresenti un sistema costituito da una stampante e un utente. 
+
+La stampante pu`o trovarsi nello stato idle (stato iniziale) o nello stato printing. 
+Per stampare ci mette tra 5 e 10 unit`a di tempo (u.t.). 
+
+L’utente può lavorare o aspettare il termine della stampa, ma non lavora per più di 100 u.t. 
+Inizialmente lavora.
+
+I due automi sono sincronizzati: 
+- la stampante inizia a stampare quando riceve un comando dall’utente 
+- l’utente esce dallo stato di attesa quando la stampante l’avverte che la stampa `e terminata
+
+Formulare:
+(1) una query Uppaal per verificare se ogni esecuzione ha almeno uno stato in cui la stampante stampa
+(2) una per verificare se ogni stato in cui l’utente lavora `e sempre seguito da uno stato in cui aspetta la stampa.
+
+*/
+
+chan print, printed;</declaration><template><name x="5" y="5">Printer</name><declaration>// Place local declarations here.
+clock x;</declaration><location id="id0" x="40" y="-104"><name x="48" y="-136">printing</name><label kind="invariant" x="56" y="-104">x&lt;=10</label><label kind="comments">Lo stato in cui la stampante sta stampando un documento.
+
+Per stampare ci mette tra 5 e 10 unit`a di tempo (u.t.).
+
+La stampante inizia a stampare quando riceve un comando dall’utente, e l’utente esce dallo stato di attesa quando la stampante l’avverte che la stampa è terminata.</label></location><location id="id1" x="-224" y="-104"><name x="-248" y="-136">idle</name><label kind="comments">Stato iniziale</label></location><init ref="id1"/><transition><source ref="id0"/><target ref="id1"/><label kind="guard" x="-104" y="0">x&gt;=5</label><label kind="synchronisation" x="-112" y="-32">printed!</label><label kind="assignment" x="-104" y="16">x:=0</label><label kind="comments">La stampante inizia a stampare quando riceve un comando dall’utente, e l’utente esce dallo stato di attesa quando la stampante l’avverte che la stampa è terminata.</label><nail x="-16" y="-8"/><nail x="-152" y="-8"/></transition><transition><source ref="id1"/><target ref="id0"/><label kind="synchronisation" x="-112" y="-216">print?</label><label kind="assignment" x="-112" y="-192">x:=0</label><label kind="comments">La stampante inizia a stampare quando riceve un comando dall’utente, e l’utente esce dallo stato di attesa quando la
+stampante l’avverte che la stampa è terminata.</label><nail x="-152" y="-192"/><nail x="-24" y="-192"/></transition></template><template><name>User</name><declaration>clock y;</declaration><location id="id2" x="-128" y="-160"><name x="-138" y="-190">waiting</name><label kind="comments">L'utente aspetta la fine della stampa.
+
+La stampante inizia a stampare quando riceve un comando dall’utente, e l’utente esce dallo stato di attesa quando la stampante l’avverte che la stampa è terminata.</label></location><location id="id3" x="-424" y="-160"><name x="-480" y="-192">working</name><label kind="invariant" x="-480" y="-136">y&lt;=100</label><label kind="comments">L'utente in questo stato sta lavorando.
+
+Inizialmente l'utente lavora, non può lavorare per più di 100 u.t.</label></location><init ref="id3"/><transition><source ref="id2"/><target ref="id3"/><label kind="synchronisation" x="-304" y="-104">printed?</label><label kind="assignment" x="-288" y="-72">y:=0</label><label kind="comments">All'utente arriva notifica che la stampante ha terminato pertanto può tornare a lavorare.</label><nail x="-208" y="-80"/><nail x="-344" y="-80"/></transition><transition><source ref="id3"/><target ref="id2"/><label kind="synchronisation" x="-296" y="-272">print!</label><label kind="assignment" x="-296" y="-240">y:=0</label><label kind="comments">L'utente magari vuole stampare qualcosa, per farlo deve sincronizzarsi con la stampante, inviando il messaggio "print".</label><nail x="-344" y="-248"/><nail x="-208" y="-248"/></transition></template><system>// Place template instantiations here.
+
+// List one or more processes to be composed into a system.
+system Printer, User;</system></nta>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_1.dtd'><nta><declaration>// Place global declarations here.
+
+/*
+Modellare mediante una rete di TA un sistema biologico costituito da un cane e la sua pancia.
+
+• Il cane può essere in uno degli stati seguenti: gioca (stato iniziale), mangia, dorme. 
+	Le transizioni sono da gioca a mangia, da mangia a dorme e da dorme a gioca.
+	Per mangiare ci mette da 2 a 4 unit`a di tempo e non pu`o dormire pi`u di 8 unit`a di tempo.
+
+• La pancia può essere piena (stato iniziale) o vuota, e le transizioni sono da piena a vuota e da vuota a piena. 
+	La pancia non resta piena per più di 10 unit`a di tempo.
+
+• I due automi sono sincronizzati in questo modo:
+	– quando la pancia non `e pi`u piena manda al cane il messaggio “fame” e, se il cane sta giocando, inizia allora a mangiare;
+	– quando il cane finisce di mangiare manda alla pancia il messaggio “mangiato” e la pancia passa allora nello stato piena.
+
+Formulare e verificare in Uppaal se il sistema soddisfa le propriet`a seguenti:
+(1) in ogni esecuzione esiste almeno uno stato in cui il cane mangia; 
+(2) esiste un’esecuzione in cui il cane gioca con la pancia vuota almeno una volta; 
+(3) esiste un’esecuzione in cui il cane gioca sempre.
+*/
+
+chan fame;
+chan mangiato;</declaration><template><name x="5" y="5">Cane</name><declaration>// Place local declarations here.
+clock x;</declaration><location id="id0" x="-120" y="-8"><name x="-144" y="8">dorme</name><label kind="invariant" x="-144" y="24">x&lt;=8</label><label kind="comments">Non può dormire più di 8 unità di tempo</label></location><location id="id1" x="72" y="-192"><name x="62" y="-222">mangia</name><label kind="invariant" x="62" y="-177">x&lt;=4</label><label kind="comments">Per mangiare ci mette da 2 a 4 u.t</label></location><location id="id2" x="-304" y="-192"><name x="-344" y="-224">gioca</name><label kind="invariant" x="-360" y="-176">x&lt;=20</label></location><init ref="id2"/><transition><source ref="id0"/><target ref="id2"/><label kind="assignment" x="-256" y="-104">x:=0</label></transition><transition><source ref="id1"/><target ref="id0"/><label kind="guard" x="0" y="-120">x&gt;=2</label><label kind="synchronisation" x="-40" y="-80">mangiato!</label><label kind="assignment" x="-16" y="-104">x:=0</label><label kind="comments">Per mangiare ci mette da 2 a 4 unità di tempo.
+Quando il cane finisce di mangiare manda alla pancia il messaggio “mangiato” e la pancia passa allora nello stato piena.</label></transition><transition><source ref="id2"/><target ref="id1"/><label kind="synchronisation" x="-144" y="-216">fame?</label><label kind="assignment" x="-136" y="-184">x:=0</label><label kind="comments">Quando la pancia non è più piena manda al cane il messaggio “fame” e, se il cane sta giocando, inizia allora a mangiare;</label></transition></template><template><name>Pancia</name><declaration>clock y;</declaration><location id="id3" x="-72" y="-136"><name x="-72" y="-168">vuota</name><label kind="comments">quando la pancia non `e pi`u piena manda al cane il messaggio “fame” e, se il cane sta giocando, inizia allora a mangiare;</label></location><location id="id4" x="-272" y="-136"><name x="-312" y="-168">piena</name><label kind="invariant" x="-320" y="-120">y&lt;=10</label><label kind="comments">La pancia non resta piena per più di 10 unità di tempo.</label></location><init ref="id4"/><transition><source ref="id3"/><target ref="id4"/><label kind="synchronisation" x="-208" y="-80">mangiato?</label><label kind="assignment" x="-192" y="-56">y:=0</label><label kind="comments">quando il cane finisce di mangiare manda alla pancia il messaggio “mangiato” e la pancia passa allora nello stato piena.</label><nail x="-112" y="-56"/><nail x="-224" y="-56"/></transition><transition><source ref="id4"/><target ref="id3"/><label kind="synchronisation" x="-200" y="-240">fame!</label><label kind="assignment" x="-192" y="-216">y:=0</label><label kind="comments">quando la pancia non `e pi`u piena manda al cane il messaggio “fame” e, se il cane sta giocando, inizia allora a mangiare;</label><nail x="-224" y="-216"/><nail x="-120" y="-216"/></transition></template><system>// Place template instantiations here.
+
+// List one or more processes to be composed into a system.
+system Cane, Pancia;</system></nta>

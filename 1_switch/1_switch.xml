@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_1.dtd'><nta><declaration>// Place global declarations here.
+
+/*
+Formulare le seguenti query UPPAL:
+
+1. l’interruttore verr`a sempre acceso prima o poi
+2. esiste la possibilit`a che l’interruttore sia sempre spento, per tutta la durata di un’esecuzione
+3. ogni volta che l’interruttore `e acceso verr`a spento prima o poi
+4. esiste la possibilit`a che l’interruttore resti acceso per pi`u di 10 time units
+
+*/</declaration><template><name x="5" y="5">Switch</name><declaration>// Place local declarations here.
+clock x,y;</declaration><location id="id0" x="-80" y="-408"><name x="-90" y="-438">on</name><label kind="invariant" x="-136" y="-416">y&lt;=3</label><label kind="comments">L'interruttore è nella posizione "on"</label></location><location id="id1" x="-328" y="-408"><name x="-338" y="-438">off</name><label kind="comments">Lo switch è spento</label></location><init ref="id1"/><transition><source ref="id0"/><target ref="id0"/><label kind="guard" x="-8" y="-424">x&gt;=2</label><label kind="assignment" x="-8" y="-408">x:=0</label><nail x="-16" y="-440"/><nail x="-16" y="-368"/></transition><transition><source ref="id0"/><target ref="id1"/><label kind="guard" x="-224" y="-344">y==3</label><label kind="assignment" x="-224" y="-376">x:=0</label><nail x="-136" y="-352"/><nail x="-264" y="-352"/></transition><transition><source ref="id1"/><target ref="id0"/><label kind="guard" x="-232" y="-496">x&gt;=1</label><label kind="assignment" x="-248" y="-464">x:=0, y:=0</label><nail x="-272" y="-472"/><nail x="-144" y="-472"/></transition></template><system>// Place template instantiations here.
+
+// List one or more processes to be composed into a system.
+system Switch;</system></nta>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_1.dtd'><nta><declaration>// Place global declarations here.
+
+/*
+
+Un lavoratore lavora (stato “work”) esattamente per 8 u.t. e, quando ha finito, deve prendere l’ascensore per uscire. 
+
+Se la porta dell’ascensore è chiusa deve aspettare che si apra (stato “wait”). 
+Quando esce, ha finito (stato “finish”), e non ci sono transizioni uscenti da “finish”.
+
+La porta dell’ascensore si apre e si richiude, restando in ciascuno degli stati “open” e “closed” tra 1 e 3 u.t. Inizialmente è chiusa.
+
+Il sistema dovrebbe essere modellato in modo che il lavoratore prenda l’ascensore appena possibile.
+
+Dare tre diversi modelli per questo sistema:
+
+Mia interpretazione:
+
+Il lavoratore dopo otto u.t. chiama l'ascensore e lui stesso entra nello stato di wait, mentre l'ascensore risponde alla chiamata.
+Appena l'ascensore arriva manda un messaggio al lavoratore dicendogli che è arrivato e le porte sono aperte.
+Dopodichè le porte si richiudono.
+
+Verificare che:
+1. In nessuna esecuzione il lavoratore aspetta quando la porta dell’ascensore è aperta.  questa propriet`a non `e soddisfatta dal sistema n.1 (spiegare perchè), e lo `e invece dai sistemi n. 2 e 3.
+2. Nessuna esecuzione si trova mai in uno stato di deadlock (in cui nessun processo pu`o compiere alcuna action transition). 
+	Questa proprietà è soddisfatta dal sistema n. 3, ma non dai sistemi n. 1 e 2 (spiegare perchè).
+
+3. Ogni esecuzione ha almeno uno stato in cui il lavoratore ha finito. Questa proprietà è soddisfatta dai sistemi n. 1 e 3, ma non dal sistema n. 2 (spiegare perch´e).
+
+4. Esiste un’esecuzione che abbia almeno uno stato in cui il lavoratore lavora e la porta è aperta. 
+	Questa propriet`a `e soddisfatta da tutti e tre i sistemi.
+
+5. Ogni esecuzione ha almeno uno stato in cui il lavoratore lavora e la porta è aperta. 
+	Questa propriet`a `e soddisfatta da tutti e tre i sistemi.
+
+6. Ogni stato in cui il lavoratore lavora è sempre seguito da uno stato in cui ha finito. 
+	Questa proprietà è soddisfatta dai sistemi n. 1 e 3, ma non dal sistema n. 2 (spiegare perchè).
+
+*/
+
+
+
+
+bool isOpen = false;
+clock x,y;</declaration><template><name x="5" y="5">Worker</name><declaration>// Place local declarations here.
+</declaration><location id="id0" x="192" y="-200"><name x="182" y="-230">finished</name><label kind="comments">Il lavoratore ha finito esce</label></location><location id="id1" x="-104" y="-200"><name x="-128" y="-232">waiting</name><label kind="invariant" x="-144" y="-176">not isOpen</label></location><location id="id2" x="-424" y="-200"><name x="-472" y="-232">working</name><label kind="invariant" x="-480" y="-192">x&lt;=8</label><label kind="comments">Un lavoratore lavora per 8 u.t.
+Quando ha finito deve prendere l'ascensore.</label></location><init ref="id2"/><transition><source ref="id2"/><target ref="id0"/><label kind="guard" x="-200" y="-416">isOpen &amp;&amp; x == 8</label><label kind="assignment" x="-144" y="-392">x:=0</label><nail x="-280" y="-394"/><nail x="40" y="-394"/></transition><transition><source ref="id1"/><target ref="id0"/><label kind="assignment" x="32" y="-200">x:=0</label></transition><transition><source ref="id2"/><target ref="id1"/><label kind="guard" x="-328" y="-224">not isOpen &amp;&amp; x==8</label><label kind="assignment" x="-280" y="-200">x:=0</label></transition></template><template><name>Doors</name><location id="id3" x="-176" y="-272"><name x="-160" y="-296">closed</name><label kind="invariant" x="-184" y="-256">y&lt;=3 &amp;&amp; not isOpen</label><label kind="comments">Le porte dell'ascensore sono chiuse</label></location><location id="id4" x="-584" y="-272"><name x="-664" y="-296">opened</name><label kind="invariant" x="-696" y="-256">y&lt;=3 &amp;&amp; isOpen</label><label kind="comments">Le porte dell'ascensore sono aperte</label></location><init ref="id3"/><transition><source ref="id3"/><target ref="id4"/><label kind="guard" x="-408" y="-216">y&gt;=1</label><label kind="assignment" x="-464" y="-192">y:=0, isOpen := true</label><nail x="-320" y="-224"/><nail x="-448" y="-224"/></transition><transition><source ref="id4"/><target ref="id3"/><label kind="guard" x="-408" y="-368">y&gt;=1</label><label kind="assignment" x="-472" y="-344">y:=0, isOpen := false</label><nail x="-448" y="-320"/><nail x="-320" y="-320"/><nail x="-320" y="-320"/></transition></template><system>// Place template instantiations here.
+
+// List one or more processes to be composed into a system.
+system Worker, Doors;</system></nta>
